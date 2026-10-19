@@ -1,26 +1,47 @@
 # ArduinoUnoQ_AdafruitTouch
 
+[![Arduino Library Manager](https://img.shields.io/badge/Arduino%20Library%20Manager-ArduinoUnoQ__AdafruitTouch-00979D.svg)](https://www.arduino.cc/reference/en/libraries/)
+[![Release](https://img.shields.io/badge/Release-v1.0.0-blue.svg)](https://github.com/ankur608/ArduinoUnoQ_AdafruitTouch/releases)
+[![Board: Arduino UNO Q](https://img.shields.io/badge/Board-Arduino%20UNO%20Q%20(STM32U585)-teal.svg)](https://www.arduino.cc/)
+[![Shield: Adafruit 2.8" Capacitive TFT](https://img.shields.io/badge/Shield-Adafruit%20PID%201947-orange.svg)](https://www.adafruit.com/product/1947)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform: Arduino Uno Q](https://img.shields.io/badge/Board-Arduino%20UNO%20Q%20(STM32U585)-00979D.svg)](https://www.arduino.cc/)
 
 A streamlined, open-source Arduino library for interfacing the **Adafruit 2.8" TFT Touch Shield v2 with Capacitive Touch (PID 1947)** on the **Arduino UNO Q** (`arduino_uno_q_stm32u585xx`).
 
-Eliminates all the low-level headache of custom ICSP SPI pin remapping (`MOSI=23`, `MISO=22`, `SCK=24`), FT6206 I2C setup, and manual landscape rotation math into a clean, 1-line API!
+Eliminates all the low-level headache of custom ICSP SPI pin remapping (`MOSI=23`, `MISO=22`, `SCK=24`), FT6206 I2C setup, and manual orientation coordinate math into a clean, intuitive 1-line API!
+
+---
+
+## Features
+
+* 🚀 **Zero-Config Hardware Setup:** Automatically maps dedicated STM32U585 SPI ICSP pins and initializes both the ILI9341 display and FT6206 capacitive controller with a single `screen.begin()`.
+* 🔄 **Automated Coordinate Calibration:** Computes the coordinate transformation matrix for all 4 display rotations (`0`, `1`, `2`, `3`). `screen.getPoint()` always returns exact 1:1 screen pixel coordinates.
+* 🕹️ **Complete Retro Arcade Suite:** Includes full playable implementations of **Pong** (60 FPS vs AI), **Breakout** (50-brick arcade), and **Tetris** (revised portrait light-mode with 3D beveled blocks and retro start splash).
+* 📖 **Authentic Yusuke Murata Manga Reader:** Includes **ComicReader**, rendering 7 high-definition $240 \times 320$ Floyd-Steinberg dithered panels of *One-Punch Man* with simulated E-Paper bi-stable refresh.
+* 📊 **E-Ink Specs Dashboard:** Multi-page e-paper emulator showcasing live Uno Q dual-core telemetry (Qualcomm QRB2210 MPU + STM32U585 MCU, 802.11ac Wi-Fi, BLE 5.0).
+* 🎛️ **Modern Touch UI Controls:** Smooth capacitive sliders, toggle switches, finger-drawing canvas with color palettes, and interactive calibration targets.
 
 ---
 
 ## Installation
 
-### Method 1: Arduino IDE (ZIP Installation)
+### Method 1: Arduino Library Manager (Recommended)
+1. Open **Arduino IDE**.
+2. Go to **Tools** $\rightarrow$ **Manage Libraries...** (or press `Ctrl + Shift + I`).
+3. Search for **`ArduinoUnoQ_AdafruitTouch`** and click **Install**.
+
+---
+
+### Method 2: Arduino IDE (ZIP Installation)
 1. On this GitHub repository page, click the green **Code** button and select **Download ZIP**.
 2. Open **Arduino IDE**.
 3. Go to **Sketch** $\rightarrow$ **Include Library** $\rightarrow$ **Add .ZIP Library...**
 4. Select the downloaded `ArduinoUnoQ_AdafruitTouch-main.zip`.
-5. Open the example from **File** $\rightarrow$ **Examples** $\rightarrow$ **ArduinoUnoQ_AdafruitTouch** $\rightarrow$ **TouchDemo**.
+5. Open any example from **File** $\rightarrow$ **Examples** $\rightarrow$ **ArduinoUnoQ_AdafruitTouch**.
 
 ---
 
-### Method 2: Git Clone (Arduino IDE / Local Libraries)
+### Method 3: Git Clone (Local Libraries)
 Clone directly into your Arduino libraries directory:
 
 ```bash
@@ -32,16 +53,6 @@ git clone https://github.com/ankur608/ArduinoUnoQ_AdafruitTouch.git
 cd ~/Arduino/libraries
 git clone https://github.com/ankur608/ArduinoUnoQ_AdafruitTouch.git
 ```
-
----
-
-### Method 3: Arduino App Lab
-1. In **Arduino App Lab**, navigate to your active Workspace or Project.
-2. In the project folder, ensure the library is present in your sketch folder or imported via the App Lab Library Manager.
-3. Include the header directly:
-   ```cpp
-   #include <ArduinoUnoQ_AdafruitTouch.h>
-   ```
 
 ---
 
@@ -77,7 +88,7 @@ UnoQ_AdafruitTouch screen;
 void setup() {
   Serial.begin(115200);
 
-  // 1-line setup: initializes ILI9341 and FT6206 touch in Landscape mode
+  // 1-line setup: initializes ILI9341 display and FT6206 touch in Landscape mode
   screen.begin();
 
   screen.tft.fillScreen(ILI9341_BLACK);
@@ -89,7 +100,7 @@ void setup() {
 
 void loop() {
   if (screen.touched()) {
-    // getPoint() automatically maps coordinates to match the screen orientation!
+    // getPoint() automatically maps coordinates to match active screen orientation!
     TS_Point p = screen.getPoint();
 
     Serial.print("Touch -> X: ");
@@ -108,57 +119,45 @@ void loop() {
 
 Once installed, navigate in Arduino IDE to **File** $\rightarrow$ **Examples** $\rightarrow$ **ArduinoUnoQ_AdafruitTouch**:
 
-1. **`TouchDemo`**:
-   * Interactive on-screen buttons (`BUTTON A`, `BUTTON B`) that light up with color changes on touch.
-   * Four corner targets (`TL`, `TR`, `BL`, `BR`) verifying 1:1 hardware coordinate calibration.
-   * Live touch coordinate readout and touch cursor points.
+| Example | Description | Orientation | Highlights |
+| :--- | :--- | :---: | :--- |
+| **`ComicReader`** | Authentic Yusuke Murata One-Punch Man Manga Issue | Portrait ($240 \times 320$) | 7 Full-screen dithered manga panels, fast SPI streaming, E-Paper inversion flash |
+| **`Tetris`** | 8-Bit Falling Block Arcade | Portrait ($240 \times 320$) | Light theme, grid matrix, 3D beveled blocks, start splash screen, compact thumb controls |
+| **`PongGame`** | Real-Time Table Tennis vs AI | Landscape ($320 \times 240$) | Fluid 60 FPS, 1:1 finger paddle tracking, dynamic AI opponent, scorekeeper |
+| **`Breakout`** | Arcade Brick Breaker | Landscape ($320 \times 240$) | 50 colorful bricks, ball physics, paddle deflection angles, victory celebration |
+| **`EInkDashboard`** | E-Paper Spec Telemetry | Portrait ($240 \times 320$) | Dual-core Uno Q specs (QRB2210 MPU + STM32U585 MCU), Wi-Fi/BLE telemetry |
+| **`UIControlsDemo`** | Embedded Touch Widgets | Landscape ($320 \times 240$) | Animated sliding toggle switch, 0-100% slider with dynamic color preview box |
+| **`TouchPaint`** | Finger Drawing Canvas | Landscape ($320 \times 240$) | 8-color interactive palette, smooth line interpolation, one-touch clear canvas |
+| **`TouchDemo`** | Touch Calibration & Buttons | Landscape ($320 \times 240$) | Tactile on-screen buttons, 4 corner calibration targets, coordinate readout |
 
-2. **`TouchPaint`**:
-   * Full finger-drawing canvas with continuous smooth line interpolation.
-   * 8-color interactive palette bar (Red, Green, Blue, Yellow, Cyan, Magenta, White, Eraser).
-   * One-touch "CLEAR" button.
+---
 
-3. **`UIControlsDemo`**:
-   * Modern embedded dashboard with animated sliding toggle switch (ON / OFF).
-   * Smooth touch slider ($0 - 100\%$) with live value readout.
-   * Real-time dynamic color preview box that changes intensity as the slider is dragged.
-   * Momentary tactile action button with pulse feedback.
+## Detailed Example Breakdown
 
-4. **`PongGame` (Ping-Pong vs AI)**:
-   * Retro arcade table tennis at fluid 60 FPS.
-   * Player paddle directly tracks your finger vertically with 1:1 capacitive precision.
-   * Dynamic AI opponent, multi-angle bounce physics, and increasing ball speeds.
+### 1. `ComicReader` (Authentic Yusuke Murata One-Punch Man Manga Reader)
+100% Authentic original Yusuke Murata manga artwork directly converted into high-definition 1-bit Floyd-Steinberg dithered E-Ink panels ($240 \times 320$):
+* **Page 1 (Cover):** Tankōbon Volume 1 Cover — Saitama putting on his red hero glove with cape and belt.
+* **Page 2 (The Moon Jump):** Chapter 35 — Kicked to outer space, standing on the moon's surface looking back at Earth.
+* **Page 3 (Serious Series):** Chapter 36 — Intense close-up: *"Killer Move: Serious Series"*.
+* **Page 4 (Serious Punch!):** Chapter 36 — Climax: Planetary atmospheric shockwave splitting the globe.
+* **Page 5 (Death Punch):** Chapter 17 — Sparring match: The colossal forced-perspective *"DEATH"* punch stopped 1 inch from Genos's face.
+* **Page 6 (Supermarket Bargain Gag):** Chapter 10 — Comic relief: Saitama shrieking *"Today is bargain day at the supermarket!!"*
+* **Page 7 (The Legend: "OK."):** Chapter 36 — The world-famous nonchalant *"OK."* deadpan expression.
+* **Navigation:** Tap right/center to advance; tap left edge to go back. Features authentic bi-stable E-Paper black/white inversion flash.
 
-5. **`Breakout` (Classic Brick Breaker)**:
-   * 50 colorful bricks across 5 rows (Red, Orange, Yellow, Green, Cyan).
-   * Smooth horizontal touch-paddle tracking, life counter, score multiplier, and victory state.
+### 2. `Tetris` (Portrait Light-Mode Falling Block Arcade)
+* Standard 10x20 playfield rendered on a clean paper-white background with subtle coordinate grid lines.
+* Full 7-tetromino randomizer (I, O, T, S, Z, J, L) with ghost piece drop projection.
+* 3D beveled block shaders for authentic arcade aesthetics.
+* Retro 8-bit start splash screen with high-score tracking.
+* Compact, ergonomic bottom thumb controls (`LEFT`, `RIGHT`, `ROTATE`, `DROP`) leaving the active playfield 100% unobstructed.
 
-6. **`Tetris` (8-Bit Falling Block Arcade)**:
-   * Authentic 10x20 matrix with all 7 official tetrominoes (I, O, T, S, Z, J, L).
-   * 90-degree Portrait mode ($240 \times 320$) with Light theme, playfield grid lines, and 3D beveled blocks.
-   * Start splash screen and ergonomic bottom touch controls.
-
-7. **`EInkDashboard` (E-Paper Display Emulator & Uno Q System Specs)**:
-   * Realistic monochrome E-Paper aesthetic with simulated black/white flash transitions.
-   * Header with Wi-Fi, BLE, and battery status icons.
-   * 3 interactive multi-page specification cards:
-     - **Page 1:** Dual-Core Architecture (STM32U585 MCU @ 160MHz + Qualcomm QRB2210 MPU @ 2.0GHz, 4GB RAM, 16GB eMMC).
-     - **Page 2:** Wireless & Networking (802.11ac Wi-Fi, BLE 5.0, high-speed UART router bridge).
-     - **Page 3:** Adafruit 2.8" Shield Pinout, ICSP SPI remapping, and live peripheral telemetry.
-   * Touch navigation bar with `PREV`, `REFRESH`, and `NEXT` buttons.
-
-8. **`ComicReader` (Authentic Yusuke Murata One Punch Man Manga Issue in English)**:
-   * 100% Authentic original Yusuke Murata manga artwork directly converted into high-definition 1-bit Floyd-Steinberg dithered E-Ink panels ($240 \times 320$).
-   * Full 7-Page Manga Story Arc:
-     - **Page 1 (Cover Page):** Tankobon Volume 1 Cover — Saitama putting on his red hero glove with cape and belt.
-     - **Page 2 (The Moon Jump):** Chapter 35 — Kicked to outer space, standing on the moon's surface looking back at Earth.
-     - **Page 3 (Serious Series):** Chapter 36 — Intense close-up: *"Killer Move: Serious Series"*.
-     - **Page 4 (Serious Punch!):** Chapter 36 — Climax: Planetary atmospheric shockwave splitting the globe.
-     - **Page 5 (Death Punch):** Chapter 17 — Sparring match: The colossal forced-perspective *"DEATH"* punch stopped 1 inch from Genos's face.
-     - **Page 6 (Supermarket Bargain Gag):** Chapter 10 — Comic relief: Saitama shrieking *"Today is bargain day at the supermarket!!"*
-     - **Page 7 (The Legend: "OK."):** Chapter 36 — The world-famous nonchalant *"OK."* deadpan expression.
-   * High-speed SPI streaming for instant screen drawing with simulated bi-stable E-Paper black/white inversion flash.
-   * Capacitive touch navigation: tap right/center to advance, tap left edge to go back.
+### 3. `EInkDashboard` (E-Paper Uno Q Specs & Wireless Telemetry)
+* Simulated electronic ink display with dual-core architectural specifications:
+  * **Core 1:** STM32U585 ARM Cortex-M33 MCU @ 160MHz (2MB Flash, 786KB SRAM).
+  * **Core 2:** Qualcomm QRB2210 Quad-Core Kryo MPU @ 2.0GHz (4GB LPDDR4, 16GB eMMC).
+  * **Connectivity:** Dual-band 802.11ac Wi-Fi, Bluetooth 5.0 BLE, high-speed UART router bridge.
+  * **Pinout & Telemetry:** Dedicated ICSP SPI mapping table and live peripheral status.
 
 ---
 
@@ -166,16 +165,16 @@ Once installed, navigate in Arduino IDE to **File** $\rightarrow$ **Examples** $
 
 The Adafruit 2.8" Shield connects SPI solely through the 6-pin **ICSP header** (not pins 11–13). On the Arduino UNO Q's STM32U585 core, these are mapped to dedicated microcontroller pins:
 
-| Shield Signal | Function | UNO Q Digital Pin | STM32U585 GPIO |
-| :--- | :--- | :--- | :--- |
-| **TFT CS** | Display Chip Select | `10` | Standard Digital Pin |
-| **TFT DC** | Data / Command | `9` | Standard Digital Pin |
-| **MOSI** | SPI Master Out | **`23`** | ICSP Header (`PC3`) |
-| **MISO** | SPI Master In | **`22`** | ICSP Header (`PC2`) |
-| **SCK** | SPI Clock | **`24`** | ICSP Header (`PD1`) |
-| **TFT RST** | Reset | `-1` | Tied to hardware reset |
-| **SDA** | FT6206 I2C Data | `SDA` | Hardware `Wire` (Address `0x38`) |
-| **SCL** | FT6206 I2C Clock | `SCL` | Hardware `Wire` |
+| Shield Signal | Function | UNO Q Digital Pin | STM32U585 GPIO | Hardware Route |
+| :--- | :--- | :---: | :---: | :--- |
+| **TFT CS** | Display Chip Select | `10` | Standard Digital Pin | Dedicated Chip Select |
+| **TFT DC** | Data / Command | `9` | Standard Digital Pin | Display Command Line |
+| **MOSI** | SPI Master Out | **`23`** | ICSP Header (`PC3`) | SPI Primary Bus |
+| **MISO** | SPI Master In | **`22`** | ICSP Header (`PC2`) | SPI Primary Bus |
+| **SCK** | SPI Clock | **`24`** | ICSP Header (`PD1`) | SPI Primary Bus |
+| **TFT RST** | Reset | `-1` | Tied to hardware reset | Hardware Reset Line |
+| **SDA** | FT6206 I2C Data | `SDA` | Hardware `Wire` (Address `0x38`) | Capacitive Touch Bus |
+| **SCL** | FT6206 I2C Clock | `SCL` | Hardware `Wire` | Capacitive Touch Bus |
 
 ---
 
@@ -192,7 +191,7 @@ screen.setRotation(3); // Inverted Landscape (320x240)
 
 ---
 
-## Compatible Shields
+## Compatible Hardware
 
 | Shield Version | Product ID | Touch Chip | Status |
 | :--- | :--- | :--- | :--- |
@@ -201,6 +200,14 @@ screen.setRotation(3); // Inverted Landscape (320x240)
 
 ---
 
+## Author & Maintainer
+
+* **Author:** `ankur608`
+* **Maintainer:** `ankur608 <ankur608@users.noreply.github.com>`
+* **Repository:** [https://github.com/ankur608/ArduinoUnoQ_AdafruitTouch](https://github.com/ankur608/ArduinoUnoQ_AdafruitTouch)
+
+---
+
 ## License
 
-MIT License. Free to use in any personal, commercial, or open-source projects.
+This project is licensed under the **MIT License**. Free to use in personal, academic, commercial, and open-source embedded applications.

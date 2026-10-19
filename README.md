@@ -147,6 +147,14 @@ Once installed, navigate in Arduino IDE to **File** $\rightarrow$ **Examples** $
      - **Page 3:** Adafruit 2.8" Shield Pinout, ICSP SPI remapping, and live peripheral telemetry.
    * Touch navigation bar with `PREV`, `REFRESH`, and `NEXT` buttons.
 
+8. **`MangaReader` (Saitama One Punch Man E-Ink Comic in English)**:
+   * Authentic Japanese manga layout with high graphics, panel gutters, speech bubbles, and sound effects.
+   * Procedural screentone/halftone dithering and dynamic 36-ray explosive speed lines.
+   * 3 Interactive Manga Pages (Tap screen to turn pages with simulated E-Ink flash refresh):
+     - **Page 1 (Full 3-Panel Story):** Saitama's nonchalant face ("Hero for fun") $\rightarrow$ Dragon-level monster menace $\rightarrow$ forced-perspective Serious Punch!
+     - **Page 2 (Serious Mode):** Dramatic full-screen close-up of Serious Saitama with intense cross-hatching, forehead veins, and Japanese `ゴ ゴ ゴ` SFX.
+     - **Page 3 (Comedic Gag):** "Bargain Day at the Supermarket!" with sweat drops, shocked face, and City Z discount grocery flyer receipt.
+
 ---
 
 ## Hardware Pin Mapping (Arduino UNO Q to Adafruit Shield)

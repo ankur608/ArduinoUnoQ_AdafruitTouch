@@ -1,5 +1,5 @@
 /*
-  MangaReader.ino - Japanese Manga E-Ink Display Emulator (Saitama Edition)
+  ComicReader.ino - Japanese Comic E-Ink Display Emulator (Saitama Edition)
   Part of the ArduinoUnoQ_AdafruitTouch library.
   
   Features:

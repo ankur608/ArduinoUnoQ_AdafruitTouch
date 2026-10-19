@@ -147,7 +147,7 @@ Once installed, navigate in Arduino IDE to **File** $\rightarrow$ **Examples** $
      - **Page 3:** Adafruit 2.8" Shield Pinout, ICSP SPI remapping, and live peripheral telemetry.
    * Touch navigation bar with `PREV`, `REFRESH`, and `NEXT` buttons.
 
-8. **`MangaReader` (Saitama One Punch Man E-Ink Comic in English)**:
+8. **`ComicReader` (Saitama One Punch Man E-Ink Comic in English)**:
    * Authentic Japanese manga layout with high graphics, panel gutters, speech bubbles, and sound effects.
    * Procedural screentone/halftone dithering and dynamic 36-ray explosive speed lines.
    * 3 Interactive Manga Pages (Tap screen to turn pages with simulated E-Ink flash refresh):

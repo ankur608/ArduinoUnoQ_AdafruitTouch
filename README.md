@@ -147,13 +147,18 @@ Once installed, navigate in Arduino IDE to **File** $\rightarrow$ **Examples** $
      - **Page 3:** Adafruit 2.8" Shield Pinout, ICSP SPI remapping, and live peripheral telemetry.
    * Touch navigation bar with `PREV`, `REFRESH`, and `NEXT` buttons.
 
-8. **`ComicReader` (Saitama One Punch Man E-Ink Comic in English)**:
-   * Authentic Japanese manga layout with high graphics, panel gutters, speech bubbles, and sound effects.
-   * Procedural screentone/halftone dithering and dynamic 36-ray explosive speed lines.
-   * 3 Interactive Manga Pages (Tap screen to turn pages with simulated E-Ink flash refresh):
-     - **Page 1 (Full 3-Panel Story):** Saitama's nonchalant face ("Hero for fun") $\rightarrow$ Dragon-level monster menace $\rightarrow$ forced-perspective Serious Punch!
-     - **Page 2 (Serious Mode):** Dramatic full-screen close-up of Serious Saitama with intense cross-hatching, forehead veins, and Japanese `ゴ ゴ ゴ` SFX.
-     - **Page 3 (Comedic Gag):** "Bargain Day at the Supermarket!" with sweat drops, shocked face, and City Z discount grocery flyer receipt.
+8. **`ComicReader` (Complete 7-Page Saitama One Punch Man Manga Issue in English)**:
+   * Authentic Japanese manga comic in full e-paper aesthetic with panel gutters, speech bubbles, screentones, and SFX.
+   * Full 7-Page Complete Story Arc:
+     - **Cover Page:** Tankōbon Volume 1 Cover with Hero Association Seal and portrait.
+     - **Page 1 (City in Peril):** Crumbling skyline, fleeing citizens, and earthquake tremors.
+     - **Page 2 (The Titan):** Colossal monster roaring with glowing slit eyes and dark menace shading.
+     - **Page 3 (The Hero):** Saitama strolling with grocery bags and a leek ("Hero for fun").
+     - **Page 4 (The Monologue):** Villain's 10-page tragic backstory while Saitama picks his nose.
+     - **Page 5 (Serious Shift):** Dramatic close-up with chiseled jaw, glowing eyes, and `"SERIOUS SERIES..."`
+     - **Page 6 (Serious Punch!):** 52-ray explosive radial burst and forced-perspective red glove impact.
+     - **Page 7 (The Real Tragedy):** Saitama crying over bruised discount cabbage, Genos arriving on jet thrusters, and final "FIN" stamp!
+   * Tap right to advance page, tap left to go back (with authentic E-Ink black/white flash refresh).
 
 ---
 

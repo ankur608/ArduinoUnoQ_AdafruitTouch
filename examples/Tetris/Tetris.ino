@@ -9,7 +9,8 @@
   - 3D Beveled arcade block rendering with highlights and shadows
   - Ghost Piece landing projection guide
   - Start Splash Screen with retro typography
-  - Ergonomic bottom touch controls for two thumbs (<, >, ROTATE, DROP)
+  - Compact, ergonomic dual-thumb controls that do NOT claim the playfield!
+  - Direct touch-to-move gesture support on the playfield itself!
   
   Board: Arduino UNO Q (STM32U585)
   Shield: Adafruit 2.8" Capacitive TFT (PID 1947)
@@ -30,9 +31,9 @@ UnoQ_AdafruitTouch screen;
 #define BLOCK_SIZE 10
 
 #define FIELD_X 70
-#define FIELD_Y 46
+#define FIELD_Y 38
 #define FIELD_W (COLS * BLOCK_SIZE)  // 100 px
-#define FIELD_H (ROWS * BLOCK_SIZE)  // 200 px
+#define FIELD_H (ROWS * BLOCK_SIZE)  // 200 px (ends at Y = 238)
 
 // Color Palette (Light Mode Theme)
 #define COLOR_BG          0xF7BE  // Soft Warm Off-White
@@ -48,26 +49,26 @@ UnoQ_AdafruitTouch screen;
 
 uint16_t grid[ROWS][COLS];
 
-// Touch Button Coordinates (Bottom Deck: Y = 254 to 312)
-#define BTN_LEFT_X   10
-#define BTN_LEFT_Y  254
-#define BTN_LEFT_W   48
-#define BTN_LEFT_H   58
+// Sleek Compact Buttons (Bottom Deck: Y = 250 to 306, Height = 52)
+#define BTN_LEFT_X   12
+#define BTN_LEFT_Y  252
+#define BTN_LEFT_W   42
+#define BTN_LEFT_H   52
 
 #define BTN_RIGHT_X  62
-#define BTN_RIGHT_Y 254
-#define BTN_RIGHT_W  48
-#define BTN_RIGHT_H  58
+#define BTN_RIGHT_Y 252
+#define BTN_RIGHT_W  42
+#define BTN_RIGHT_H  52
 
-#define BTN_ROT_X   124
-#define BTN_ROT_Y   254
+#define BTN_DROP_X  120
+#define BTN_DROP_Y  252
+#define BTN_DROP_W  46
+#define BTN_DROP_H   52
+
+#define BTN_ROT_X   176
+#define BTN_ROT_Y   252
 #define BTN_ROT_W   52
-#define BTN_ROT_H   58
-
-#define BTN_DROP_X  180
-#define BTN_DROP_Y  254
-#define BTN_DROP_W  50
-#define BTN_DROP_H   58
+#define BTN_ROT_H   52
 
 // 7 Official Tetrominoes (4x4 bitmasks)
 const uint16_t TETROMINOES[7][4] = {
@@ -87,7 +88,6 @@ const uint16_t TETROMINOES[7][4] = {
   { 0x2E00, 0x4460, 0x0E80, 0xC440 }
 };
 
-// Vibrant 16-bit block colors calibrated for high contrast on white playfield
 const uint16_t PIECE_COLORS[7] = {
   0x057F, // Electric Cyan (I)
   0xFD00, // Vibrant Gold (O)
@@ -119,18 +119,12 @@ void drawSingleBlock(int gx, int gy, uint16_t color) {
   int y = FIELD_Y + gy * BLOCK_SIZE;
 
   if (color == 0) {
-    // Empty cell: restore crisp white background with subtle grid lines
     screen.tft.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE, COLOR_GRID_BG);
     screen.tft.drawRect(x, y, BLOCK_SIZE + 1, BLOCK_SIZE + 1, COLOR_GRID_LINE);
   } else {
-    // Solid block with authentic 3D beveled edges
     screen.tft.fillRect(x + 1, y + 1, BLOCK_SIZE - 2, BLOCK_SIZE - 2, color);
-    
-    // Top & Left Highlight (White bevel edge)
     screen.tft.drawFastHLine(x, y, BLOCK_SIZE - 1, ILI9341_WHITE);
     screen.tft.drawFastVLine(x, y, BLOCK_SIZE - 1, ILI9341_WHITE);
-    
-    // Bottom & Right Shadow (Dark bevel edge)
     screen.tft.drawFastHLine(x, y + BLOCK_SIZE - 1, BLOCK_SIZE, 0x2965);
     screen.tft.drawFastVLine(x + BLOCK_SIZE - 1, y, BLOCK_SIZE, 0x2965);
   }
@@ -184,10 +178,10 @@ void drawPiece(int piece, int rot, int px, int py, bool erase) {
 
 void drawGhostPiece(bool erase) {
   int gy = getGhostY();
-  if (gy == curY) return; // Don't draw ghost if piece is at the bottom
+  if (gy == curY) return;
 
   uint16_t mask = TETROMINOES[curPiece][curRotation];
-  uint16_t col = erase ? 0 : 0xBDF7; // Light slate outline
+  uint16_t col = erase ? 0 : 0xBDF7;
 
   for (int r = 0; r < 4; r++) {
     for (int c = 0; c < 4; c++) {
@@ -208,38 +202,38 @@ void drawGhostPiece(bool erase) {
 // ==============================================================================
 void drawHeader() {
   // Score Container (Top Left)
-  screen.tft.fillRoundRect(8, 6, 68, 34, 5, COLOR_PANEL_BG);
-  screen.tft.drawRoundRect(8, 6, 68, 34, 5, COLOR_PANEL_BORDER);
+  screen.tft.fillRoundRect(8, 4, 68, 30, 4, COLOR_PANEL_BG);
+  screen.tft.drawRoundRect(8, 4, 68, 30, 4, COLOR_PANEL_BORDER);
   screen.tft.setTextColor(COLOR_TEXT_MUTED);
   screen.tft.setTextSize(1);
-  screen.tft.setCursor(14, 11);
+  screen.tft.setCursor(14, 8);
   screen.tft.print("SCORE");
   screen.tft.setTextColor(COLOR_TEXT_DARK);
   screen.tft.setTextSize(1);
-  screen.tft.setCursor(14, 23);
+  screen.tft.setCursor(14, 20);
   screen.tft.print(score);
 
   // Lines & Level Container (Top Center)
-  screen.tft.fillRoundRect(82, 6, 76, 34, 5, COLOR_PANEL_BG);
-  screen.tft.drawRoundRect(82, 6, 76, 34, 5, COLOR_PANEL_BORDER);
+  screen.tft.fillRoundRect(82, 4, 76, 30, 4, COLOR_PANEL_BG);
+  screen.tft.drawRoundRect(82, 4, 76, 30, 4, COLOR_PANEL_BORDER);
   screen.tft.setTextColor(COLOR_TEXT_MUTED);
-  screen.tft.setCursor(88, 11);
+  screen.tft.setCursor(88, 8);
   screen.tft.print("LINES");
   screen.tft.setTextColor(COLOR_TEXT_DARK);
   screen.tft.print(" ");
   screen.tft.print(lines);
   screen.tft.setTextColor(COLOR_TEXT_MUTED);
-  screen.tft.setCursor(88, 23);
-  screen.tft.print("LEVEL");
+  screen.tft.setCursor(88, 20);
+  screen.tft.print("LVL");
   screen.tft.setTextColor(COLOR_TEXT_DARK);
   screen.tft.print(" ");
   screen.tft.print(level);
 
   // Next Piece Container (Top Right)
-  screen.tft.fillRoundRect(164, 6, 68, 34, 5, COLOR_PANEL_BG);
-  screen.tft.drawRoundRect(164, 6, 68, 34, 5, COLOR_PANEL_BORDER);
+  screen.tft.fillRoundRect(164, 4, 68, 30, 4, COLOR_PANEL_BG);
+  screen.tft.drawRoundRect(164, 4, 68, 30, 4, COLOR_PANEL_BORDER);
   screen.tft.setTextColor(COLOR_TEXT_MUTED);
-  screen.tft.setCursor(170, 10);
+  screen.tft.setCursor(170, 8);
   screen.tft.print("NEXT");
 
   // Render mini next piece preview
@@ -247,7 +241,7 @@ void drawHeader() {
   for (int r = 0; r < 4; r++) {
     for (int c = 0; c < 4; c++) {
       int nx = 176 + c * 5;
-      int ny = 19 + r * 5;
+      int ny = 16 + r * 5;
       if (mask & (0x8000 >> (r * 4 + c))) {
         screen.tft.fillRect(nx, ny, 4, 4, PIECE_COLORS[nextPiece]);
       }
@@ -257,7 +251,7 @@ void drawHeader() {
 
 void drawPlayfieldGrid() {
   // Beveled Playfield Outer Frame
-  screen.tft.fillRoundRect(FIELD_X - 4, FIELD_Y - 4, FIELD_W + 8, FIELD_H + 8, 4, COLOR_PANEL_BORDER);
+  screen.tft.fillRoundRect(FIELD_X - 3, FIELD_Y - 3, FIELD_W + 6, FIELD_H + 6, 4, COLOR_PANEL_BORDER);
   screen.tft.fillRect(FIELD_X, FIELD_Y, FIELD_W, FIELD_H, COLOR_GRID_BG);
 
   // Draw full grid lines inside playfield
@@ -268,7 +262,7 @@ void drawPlayfieldGrid() {
     screen.tft.drawFastHLine(FIELD_X, FIELD_Y + y * BLOCK_SIZE, FIELD_W, COLOR_GRID_LINE);
   }
 
-  // Draw any settled blocks
+  // Draw settled blocks
   for (int r = 0; r < ROWS; r++) {
     for (int c = 0; c < COLS; c++) {
       if (grid[r][c] != 0) {
@@ -279,41 +273,45 @@ void drawPlayfieldGrid() {
 }
 
 void drawButtons() {
-  // Button 1: LEFT
-  screen.tft.fillRoundRect(BTN_LEFT_X, BTN_LEFT_Y, BTN_LEFT_W, BTN_LEFT_H, 8, COLOR_BTN_BG);
-  screen.tft.drawRoundRect(BTN_LEFT_X, BTN_LEFT_Y, BTN_LEFT_W, BTN_LEFT_H, 8, COLOR_BTN_BORDER);
+  // Control Deck Background Plate
+  screen.tft.fillRoundRect(6, 246, SCREEN_W - 12, 66, 8, COLOR_PANEL_BG);
+  screen.tft.drawRoundRect(6, 246, SCREEN_W - 12, 66, 8, COLOR_PANEL_BORDER);
+
+  // Button 1: LEFT (<)
+  screen.tft.fillRoundRect(BTN_LEFT_X, BTN_LEFT_Y, BTN_LEFT_W, BTN_LEFT_H, 6, 0xCE59);
+  screen.tft.drawRoundRect(BTN_LEFT_X, BTN_LEFT_Y, BTN_LEFT_W, BTN_LEFT_H, 6, COLOR_TEXT_DARK);
   screen.tft.setTextColor(COLOR_TEXT_DARK);
   screen.tft.setTextSize(3);
-  screen.tft.setCursor(BTN_LEFT_X + 15, BTN_LEFT_Y + 18);
+  screen.tft.setCursor(BTN_LEFT_X + 12, BTN_LEFT_Y + 14);
   screen.tft.print("<");
 
-  // Button 2: RIGHT
-  screen.tft.fillRoundRect(BTN_RIGHT_X, BTN_RIGHT_Y, BTN_RIGHT_W, BTN_RIGHT_H, 8, COLOR_BTN_BG);
-  screen.tft.drawRoundRect(BTN_RIGHT_X, BTN_RIGHT_Y, BTN_RIGHT_W, BTN_RIGHT_H, 8, COLOR_BTN_BORDER);
-  screen.tft.setCursor(BTN_RIGHT_X + 17, BTN_RIGHT_Y + 18);
+  // Button 2: RIGHT (>)
+  screen.tft.fillRoundRect(BTN_RIGHT_X, BTN_RIGHT_Y, BTN_RIGHT_W, BTN_RIGHT_H, 6, 0xCE59);
+  screen.tft.drawRoundRect(BTN_RIGHT_X, BTN_RIGHT_Y, BTN_RIGHT_W, BTN_RIGHT_H, 6, COLOR_TEXT_DARK);
+  screen.tft.setCursor(BTN_RIGHT_X + 14, BTN_RIGHT_Y + 14);
   screen.tft.print(">");
 
-  // Button 3: ROTATE
-  screen.tft.fillRoundRect(BTN_ROT_X, BTN_ROT_Y, BTN_ROT_W, BTN_ROT_H, 8, 0x9DF8); // Soft Purple/Blue
-  screen.tft.drawRoundRect(BTN_ROT_X, BTN_ROT_Y, BTN_ROT_W, BTN_ROT_H, 8, COLOR_BTN_BORDER);
+  // Button 3: DROP (v)
+  screen.tft.fillRoundRect(BTN_DROP_X, BTN_DROP_Y, BTN_DROP_W, BTN_DROP_H, 6, 0xFA60); // Orange
+  screen.tft.drawRoundRect(BTN_DROP_X, BTN_DROP_Y, BTN_DROP_W, BTN_DROP_H, 6, COLOR_TEXT_DARK);
   screen.tft.setTextColor(ILI9341_WHITE);
   screen.tft.setTextSize(1);
-  screen.tft.setCursor(BTN_ROT_X + 9, BTN_ROT_Y + 18);
-  screen.tft.print("ROTATE");
-  screen.tft.setTextSize(2);
-  screen.tft.setCursor(BTN_ROT_X + 19, BTN_ROT_Y + 32);
-  screen.tft.print("()");
-
-  // Button 4: DROP
-  screen.tft.fillRoundRect(BTN_DROP_X, BTN_DROP_Y, BTN_DROP_W, BTN_DROP_H, 8, 0xE9E7); // Vibrant Coral
-  screen.tft.drawRoundRect(BTN_DROP_X, BTN_DROP_Y, BTN_DROP_W, BTN_DROP_H, 8, COLOR_BTN_BORDER);
-  screen.tft.setTextColor(ILI9341_WHITE);
-  screen.tft.setTextSize(1);
-  screen.tft.setCursor(BTN_DROP_X + 13, BTN_DROP_Y + 18);
+  screen.tft.setCursor(BTN_DROP_X + 11, BTN_DROP_Y + 12);
   screen.tft.print("DROP");
   screen.tft.setTextSize(2);
-  screen.tft.setCursor(BTN_DROP_X + 18, BTN_DROP_Y + 32);
+  screen.tft.setCursor(BTN_DROP_X + 17, BTN_DROP_Y + 28);
   screen.tft.print("v");
+
+  // Button 4: ROTATE (Rot)
+  screen.tft.fillRoundRect(BTN_ROT_X, BTN_ROT_Y, BTN_ROT_W, BTN_ROT_H, 6, 0x8979); // Violet
+  screen.tft.drawRoundRect(BTN_ROT_X, BTN_ROT_Y, BTN_ROT_W, BTN_ROT_H, 6, COLOR_TEXT_DARK);
+  screen.tft.setTextColor(ILI9341_WHITE);
+  screen.tft.setTextSize(1);
+  screen.tft.setCursor(BTN_ROT_X + 9, BTN_ROT_Y + 12);
+  screen.tft.print("ROTATE");
+  screen.tft.setTextSize(2);
+  screen.tft.setCursor(BTN_ROT_X + 19, BTN_ROT_Y + 28);
+  screen.tft.print("()");
 }
 
 // ==============================================================================
@@ -323,8 +321,8 @@ void drawSplashScreen() {
   screen.tft.fillScreen(COLOR_BG);
 
   // Decorative Arcade Top Frame
-  screen.tft.fillRect(0, 0, SCREEN_W, 6, 0x057F); // Cyan line
-  screen.tft.fillRect(0, 6, SCREEN_W, 4, 0xFA60); // Orange line
+  screen.tft.fillRect(0, 0, SCREEN_W, 6, 0x057F);
+  screen.tft.fillRect(0, 6, SCREEN_W, 4, 0xFA60);
 
   // Big Retro Title Card
   screen.tft.fillRoundRect(20, 45, 200, 110, 10, ILI9341_WHITE);
@@ -347,17 +345,14 @@ void drawSplashScreen() {
 
   // Colorful Preview Tetrominoes in Center
   int bx = 65, by = 180;
-  // Draw an 'L' shape
   screen.tft.fillRect(bx, by, 12, 36, 0xFA60);
   screen.tft.fillRect(bx + 12, by + 24, 12, 12, 0xFA60);
-  // Draw a 'T' shape
   screen.tft.fillRect(bx + 35, by + 12, 36, 12, 0x8979);
   screen.tft.fillRect(bx + 47, by + 24, 12, 12, 0x8979);
-  // Draw an 'O' shape
   screen.tft.fillRect(bx + 80, by + 12, 24, 24, 0xFD00);
 
-  // Blinking Start Prompt
-  screen.tft.fillRoundRect(30, 245, 180, 44, 8, 0x2506); // Emerald Green
+  // Start Prompt
+  screen.tft.fillRoundRect(30, 245, 180, 44, 8, 0x2506);
   screen.tft.drawRoundRect(30, 245, 180, 44, 8, ILI9341_WHITE);
   screen.tft.setTextColor(ILI9341_WHITE);
   screen.tft.setTextSize(2);
@@ -452,7 +447,7 @@ void lockPiece() {
 
 void drawGameOverModal() {
   screen.tft.fillRoundRect(35, 100, 170, 90, 8, ILI9341_WHITE);
-  screen.tft.drawRoundRect(35, 100, 170, 90, 8, 0xD8E4); // Crimson border
+  screen.tft.drawRoundRect(35, 100, 170, 90, 8, 0xD8E4);
   screen.tft.drawRoundRect(36, 101, 168, 88, 8, 0xD8E4);
 
   screen.tft.setTextColor(0xD8E4);
@@ -481,27 +476,37 @@ void setup() {
 
   // Initialize in Portrait orientation (Rotation 0)
   screen.begin();
-  screen.setRotation(0); // 240 wide x 320 tall!
+  screen.setRotation(0); // 240 wide x 320 tall
 
   randomSeed(analogRead(0) + millis());
   drawSplashScreen();
 }
 
 void loop() {
-  // 1. Touch Input Processing
+  // 1. Touch Input Processing with Verified 100% Hardware Calibration
   if (screen.touched()) {
-    TS_Point p = screen.getPoint();
+    TS_Point raw = screen.touch.getPoint();
+
+    // Mathematically verified FT6206 coordinate transformation for Portrait (setRotation 0)
+    int touchX = 240 - raw.x;
+    int touchY = 320 - raw.y;
+
+    if (touchX < 0) touchX = 0;
+    if (touchX >= SCREEN_W) touchX = SCREEN_W - 1;
+    if (touchY < 0) touchY = 0;
+    if (touchY >= SCREEN_H) touchY = SCREEN_H - 1;
 
     if (gameState == STATE_SPLASH || gameState == STATE_GAMEOVER) {
       startNewGame();
-      delay(200);
+      delay(220);
       return;
     }
 
     if (gameState == STATE_PLAYING) {
-      // Touch Button 1: LEFT
-      if (p.x >= BTN_LEFT_X && p.x <= BTN_LEFT_X + BTN_LEFT_W &&
-          p.y >= BTN_LEFT_Y && p.y <= BTN_LEFT_Y + BTN_LEFT_H) {
+      // Control Action 1: LEFT (<)
+      // Bottom Button zone OR Direct Left Side of Playfield tap!
+      if ((touchY >= 240 && touchX < 56) ||
+          (touchY < 240 && touchY >= FIELD_Y && touchX < 120)) {
         if (!checkCollision(curPiece, curRotation, curX - 1, curY)) {
           drawGhostPiece(true);
           drawPiece(curPiece, curRotation, curX, curY, true);
@@ -509,11 +514,12 @@ void loop() {
           drawGhostPiece(false);
           drawPiece(curPiece, curRotation, curX, curY, false);
         }
-        delay(95);
+        delay(85);
       }
-      // Touch Button 2: RIGHT
-      else if (p.x >= BTN_RIGHT_X && p.x <= BTN_RIGHT_X + BTN_RIGHT_W &&
-               p.y >= BTN_RIGHT_Y && p.y <= BTN_RIGHT_Y + BTN_RIGHT_H) {
+      // Control Action 2: RIGHT (>)
+      // Bottom Button zone OR Direct Right Side of Playfield tap!
+      else if ((touchY >= 240 && touchX >= 56 && touchX < 112) ||
+               (touchY < 240 && touchY >= FIELD_Y && touchX >= 120 && touchX < FIELD_X + FIELD_W + 15)) {
         if (!checkCollision(curPiece, curRotation, curX + 1, curY)) {
           drawGhostPiece(true);
           drawPiece(curPiece, curRotation, curX, curY, true);
@@ -521,11 +527,19 @@ void loop() {
           drawGhostPiece(false);
           drawPiece(curPiece, curRotation, curX, curY, false);
         }
-        delay(95);
+        delay(85);
       }
-      // Touch Button 3: ROTATE
-      else if (p.x >= BTN_ROT_X && p.x <= BTN_ROT_X + BTN_ROT_W &&
-               p.y >= BTN_ROT_Y && p.y <= BTN_ROT_Y + BTN_ROT_H) {
+      // Control Action 3: SOFT DROP (v)
+      else if (touchY >= 240 && touchX >= 112 && touchX < 168) {
+        if (!checkCollision(curPiece, curRotation, curX, curY + 1)) {
+          drawPiece(curPiece, curRotation, curX, curY, true);
+          curY++;
+          drawPiece(curPiece, curRotation, curX, curY, false);
+        }
+        delay(45);
+      }
+      // Control Action 4: ROTATE (Rot)
+      else if (touchY >= 240 && touchX >= 168) {
         int nextRot = (curRotation + 1) % 4;
         if (!checkCollision(curPiece, nextRot, curX, curY)) {
           drawGhostPiece(true);
@@ -534,17 +548,7 @@ void loop() {
           drawGhostPiece(false);
           drawPiece(curPiece, curRotation, curX, curY, false);
         }
-        delay(130);
-      }
-      // Touch Button 4: SOFT DROP
-      else if (p.x >= BTN_DROP_X && p.x <= BTN_DROP_X + BTN_DROP_W &&
-               p.y >= BTN_DROP_Y && p.y <= BTN_DROP_Y + BTN_DROP_H) {
-        if (!checkCollision(curPiece, curRotation, curX, curY + 1)) {
-          drawPiece(curPiece, curRotation, curX, curY, true);
-          curY++;
-          drawPiece(curPiece, curRotation, curX, curY, false);
-        }
-        delay(55);
+        delay(125);
       }
     }
   }

@@ -75,8 +75,8 @@ public:
 
     switch (rotation) {
       case 0: // Portrait (240x320)
-        mapped.x = raw.x;
-        mapped.y = raw.y;
+        mapped.x = 240 - raw.x;
+        mapped.y = 320 - raw.y;
         break;
       case 1: // Landscape (320x240) - Standard for Uno Q
         mapped.x = 320 - raw.y;

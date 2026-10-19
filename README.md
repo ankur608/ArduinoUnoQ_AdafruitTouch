@@ -124,6 +124,20 @@ Once installed, navigate in Arduino IDE to **File** $\rightarrow$ **Examples** $
    * Real-time dynamic color preview box that changes intensity as the slider is dragged.
    * Momentary tactile action button with pulse feedback.
 
+4. **`PongGame` (Ping-Pong vs AI)**:
+   * Retro arcade table tennis at fluid 60 FPS.
+   * Player paddle directly tracks your finger vertically with 1:1 capacitive precision.
+   * Dynamic AI opponent, multi-angle bounce physics, and increasing ball speeds.
+
+5. **`Breakout` (Classic Brick Breaker)**:
+   * 50 colorful bricks across 5 rows (Red, Orange, Yellow, Green, Cyan).
+   * Smooth horizontal touch-paddle tracking, life counter, score multiplier, and victory state.
+
+6. **`Tetris` (8-Bit Falling Block Arcade)**:
+   * Authentic 10x20 matrix with all 7 official tetrominoes (I, O, T, S, Z, J, L).
+   * On-screen thumb buttons for Left, Right, Rotate, and Soft Drop.
+   * Next piece preview window, line clear collapses, score, and level tracking.
+
 ---
 
 ## Hardware Pin Mapping (Arduino UNO Q to Adafruit Shield)

@@ -188,7 +188,7 @@ void drawButtons() {
   screen.tft.print("ROTATE");
 
   // Drop Button
-  screen.tft.fillRoundRect(BTN_DROP_X, BTN_DROP_Y, BTN_DROP_W, BTN_DROP_H, 0x8000);
+  screen.tft.fillRoundRect(BTN_DROP_X, BTN_DROP_Y, BTN_DROP_W, BTN_DROP_H, 6, 0x8000);
   screen.tft.drawRoundRect(BTN_DROP_X, BTN_DROP_Y, BTN_DROP_W, BTN_DROP_H, 6, ILI9341_WHITE);
   screen.tft.setCursor(BTN_DROP_X + 28, BTN_DROP_Y + 13);
   screen.tft.print("DROP");

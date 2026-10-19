@@ -135,8 +135,17 @@ Once installed, navigate in Arduino IDE to **File** $\rightarrow$ **Examples** $
 
 6. **`Tetris` (8-Bit Falling Block Arcade)**:
    * Authentic 10x20 matrix with all 7 official tetrominoes (I, O, T, S, Z, J, L).
-   * On-screen thumb buttons for Left, Right, Rotate, and Soft Drop.
-   * Next piece preview window, line clear collapses, score, and level tracking.
+   * 90-degree Portrait mode ($240 \times 320$) with Light theme, playfield grid lines, and 3D beveled blocks.
+   * Start splash screen and ergonomic bottom touch controls.
+
+7. **`EInkDashboard` (E-Paper Display Emulator & Uno Q System Specs)**:
+   * Realistic monochrome E-Paper aesthetic with simulated black/white flash transitions.
+   * Header with Wi-Fi, BLE, and battery status icons.
+   * 3 interactive multi-page specification cards:
+     - **Page 1:** Dual-Core Architecture (STM32U585 MCU @ 160MHz + Qualcomm QRB2210 MPU @ 2.0GHz, 4GB RAM, 16GB eMMC).
+     - **Page 2:** Wireless & Networking (802.11ac Wi-Fi, BLE 5.0, high-speed UART router bridge).
+     - **Page 3:** Adafruit 2.8" Shield Pinout, ICSP SPI remapping, and live peripheral telemetry.
+   * Touch navigation bar with `PREV`, `REFRESH`, and `NEXT` buttons.
 
 ---
 

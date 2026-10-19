@@ -135,7 +135,8 @@ void drawView1_FullPage() {
   screen.tft.drawCircle(hx, hy, 25, INK_BLACK);
 
   // Bald shine reflection highlight
-  screen.tft.drawArc(hx - 8, hy - 14, 10, 8, 220, 290, INK_BLACK);
+  screen.tft.drawLine(hx - 14, hy - 12, hx - 8, hy - 16, INK_BLACK);
+  screen.tft.drawLine(hx - 8, hy - 16, hx - 2, hy - 16, INK_BLACK);
 
   // Nonchalant egg face: simple oval eyes & straight mouth
   screen.tft.drawFastHLine(hx - 14, hy - 4, 8, INK_BLACK);

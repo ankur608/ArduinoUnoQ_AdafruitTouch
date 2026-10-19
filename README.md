@@ -147,18 +147,18 @@ Once installed, navigate in Arduino IDE to **File** $\rightarrow$ **Examples** $
      - **Page 3:** Adafruit 2.8" Shield Pinout, ICSP SPI remapping, and live peripheral telemetry.
    * Touch navigation bar with `PREV`, `REFRESH`, and `NEXT` buttons.
 
-8. **`ComicReader` (Complete 7-Page Saitama One Punch Man Manga Issue in English)**:
-   * Authentic Japanese manga comic in full e-paper aesthetic with panel gutters, speech bubbles, screentones, and SFX.
-   * Full 7-Page Complete Story Arc:
-     - **Cover Page:** Tankōbon Volume 1 Cover with Hero Association Seal and portrait.
-     - **Page 1 (City in Peril):** Crumbling skyline, fleeing citizens, and earthquake tremors.
-     - **Page 2 (The Titan):** Colossal monster roaring with glowing slit eyes and dark menace shading.
-     - **Page 3 (The Hero):** Saitama strolling with grocery bags and a leek ("Hero for fun").
-     - **Page 4 (The Monologue):** Villain's 10-page tragic backstory while Saitama picks his nose.
-     - **Page 5 (Serious Shift):** Dramatic close-up with chiseled jaw, glowing eyes, and `"SERIOUS SERIES..."`
-     - **Page 6 (Serious Punch!):** 52-ray explosive radial burst and forced-perspective red glove impact.
-     - **Page 7 (The Real Tragedy):** Saitama crying over bruised discount cabbage, Genos arriving on jet thrusters, and final "FIN" stamp!
-   * Tap right to advance page, tap left to go back (with authentic E-Ink black/white flash refresh).
+8. **`ComicReader` (Authentic Yusuke Murata One Punch Man Manga Issue in English)**:
+   * 100% Authentic original Yusuke Murata manga artwork directly converted into high-definition 1-bit Floyd-Steinberg dithered E-Ink panels ($240 \times 320$).
+   * Full 7-Page Manga Story Arc:
+     - **Page 1 (Cover Page):** Tankobon Volume 1 Cover — Saitama putting on his red hero glove with cape and belt.
+     - **Page 2 (The Moon Jump):** Chapter 35 — Kicked to outer space, standing on the moon's surface looking back at Earth.
+     - **Page 3 (Serious Series):** Chapter 36 — Intense close-up: *"Killer Move: Serious Series"*.
+     - **Page 4 (Serious Punch!):** Chapter 36 — Climax: Planetary atmospheric shockwave splitting the globe.
+     - **Page 5 (Death Punch):** Chapter 17 — Sparring match: The colossal forced-perspective *"DEATH"* punch stopped 1 inch from Genos's face.
+     - **Page 6 (Supermarket Bargain Gag):** Chapter 10 — Comic relief: Saitama shrieking *"Today is bargain day at the supermarket!!"*
+     - **Page 7 (The Legend: "OK."):** Chapter 36 — The world-famous nonchalant *"OK."* deadpan expression.
+   * High-speed SPI streaming for instant screen drawing with simulated bi-stable E-Paper black/white inversion flash.
+   * Capacitive touch navigation: tap right/center to advance, tap left edge to go back.
 
 ---
 
